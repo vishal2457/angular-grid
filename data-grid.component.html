@@ -1,0 +1,81 @@
+<div style="position: relative">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card mb-0">
+        <div class="for-show-column">
+          <column-options
+            [bulkActions]="bulkActions"
+            [currentPagePerm]="currentPagePerm"
+            [skipPermission]="skipPermission"
+            (bulkActionClick)="bulkActionClick.emit($event)"
+          ></column-options>
+          <div>
+            <grid-toolbar
+              (excelClick)="exportExcel()"
+              (addClick)="addClick.emit($event)"
+              [showExport]="!!excelURL"
+              [showAdd]="showAdd"
+              [headerTitle]="headerTitle"
+              [currentPagePerm]="currentPagePerm"
+            ></grid-toolbar>
+            <div class="table-responsive fixed-header-grid table-bordered">
+              <table class="table table-stripeddd table-borderless- cus_table">
+                <thead
+                  grid-header
+                  [checkbox]="checkbox"
+                  class="thead-light"
+                ></thead>
+                <tbody
+                  grid-data
+                  [checkbox]="checkbox"
+                  (actionButtonClick)="actionButtonClick.emit($event)"
+                  [currentPagePerm]="currentPagePerm"
+                  *ngIf="!loading"
+                ></tbody>
+              </table>
+              <grid-loader
+                *ngIf="actualLoader"
+                class="text-center"
+              ></grid-loader>
+              <p class="text-center mt-5" *ngIf="!(_ds.data$ | async).length && !actualLoader">
+                No data available !
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="p-1 col-xs-12 col-sm-12 col-sm-12 col-md-12 paging">
+          <div class="row align-items-center">
+            <div class="col col-auto">
+              <grid-limits></grid-limits>
+            </div>
+            <div class="col col-auto px-1">
+              <!-- <p> -->
+                |&nbsp;&nbsp;Rows:&nbsp;<b>{{ totalCount | number }}</b>
+              <!-- </p> -->
+            </div>
+            <div class="col col-auto px-1">
+              <!-- <p> -->
+                |&nbsp;&nbsp;Selected Rows:&nbsp;<b>{{
+                  _ds.selectedCount(totalCount) | async | number
+                }}</b>
+              <!-- </p> -->
+            </div>
+            <div class="col">
+              <dash-pagination
+                class="f-right"
+                *ngIf="totalCount"
+                [collectionSize]="totalCount"
+                [pageSize]="itemsPerPage | async"
+                [page]="currentPage | async"
+                [maxSize]="7"
+                [boundaryLinks]="true"
+                [rotate]="true"
+                (pageChange)="changePage($event)"
+              ></dash-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
